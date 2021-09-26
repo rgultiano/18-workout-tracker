@@ -10,16 +10,16 @@ const ExerciseSchema = new Schema({
     type: String,
   },
   duration: {
-    type: Integer,
+    type: Number,
   },
   weight: {
-    type: Integer,
+    type: Number,
   },
   reps: {
-    type: Integer,
+    type: Number,
   },
   sets: {
-    type: Integer,
+    type: Number,
   },
 });
 
