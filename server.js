@@ -21,18 +21,47 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
 });
 
 app.get("/api/workouts", (req, res) => {
-    db.Workout.find({})
-        .then(dbWorkouts => {
-            res.json(dbWorkouts);
-        })
-        .catch(err => {
-            res.json(err);
-        });
+    db.Workout.aggregate([{
+        "$match": {}
+        },
+        {
+          "$addFields": {
+            "totalDuration": {
+              "$reduce": {
+                 input: "$exercises",
+                 initialValue: 0,
+                 in: { 
+                   $add: ["$$value", "$$this.duration"]
+                 }
+               }
+            }
+          }
+    }]).then(dbWorkouts => {
+        res.json(dbWorkouts);
+    })
+    .catch(err => {
+        res.json(err);
+    });
 });
 
 
 app.get("/api/workouts/range", ({body}, res) => {
-    db.Workout.find({}).sort('-date').limit(7)
+    db.Workout.aggregate([{
+        "$match": {}
+        },
+        {
+          "$addFields": {
+            "totalDuration": {
+              "$reduce": {
+                 input: "$exercises",
+                 initialValue: 0,
+                 in: { 
+                   $add: ["$$value", "$$this.duration"]
+                 }
+               }
+            }
+          }
+    }]).sort('-date').limit(7)
     .then(dbWorkouts => {
         res.json(dbWorkouts);
     })
