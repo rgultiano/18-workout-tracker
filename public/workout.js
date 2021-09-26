@@ -28,6 +28,8 @@ function tallyExercises(exercises) {
     } else if (curr.type === "cardio") {
       acc.totalDistance = (acc.totalDistance || 0) + curr.distance;
     }
+    if(!acc.totalDistance)
+      acc.totalDistance = 0;
     return acc;
   }, {});
   return tallied;
